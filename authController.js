@@ -50,7 +50,7 @@ class authController {
       }
       const validPassword = bcrypt.compareSync(password, user.password);
       if (!validPassword) {
-        return res.status(400).json({ message: 'password is wrong' });
+        res.status(400).json({ message: 'password is wrong' });
       }
 
       const token = generateAccessToken(user._id, user.roles);
@@ -62,13 +62,15 @@ class authController {
   }
   async getUsers(req, res) {
     try {
-      const userRole = new Role();
-      const adminRole = new Role({ value: 'admin' });
-      await userRole.save();
-      await adminRole.save();
-      res.json('server works');
+      const users = await User.find();
+      res.json(users);
     } catch (e) {}
   }
 }
 
 module.exports = new authController();
+
+// const userRole = new Role();
+// const adminRole = new Role({ value: 'admin' });
+// await userRole.save();
+// await adminRole.save();
